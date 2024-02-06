@@ -8,11 +8,11 @@ import { Column, Entity } from 'typeorm';
 export class User extends CommonEntity {
   @Column({ unique: true })
   @Field()
-  username: string;
+  email: string;
 
   @Column({ unique: true })
   @Field()
-  email: string;
+  username: string;
 
   @Column()
   @Field()
