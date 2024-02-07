@@ -1,6 +1,7 @@
 import { HttpCode, HttpStatus, UsePipes } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
+import { User } from '../users/entities/user.entity';
 import {
   RefreshTokensInput,
   SignInInput,
@@ -9,11 +10,10 @@ import {
   SignResponse,
   SignUpInput,
 } from './dtos';
-import { Auth } from './entities/auth.entity';
 import { signInSchema, signUpSchema } from './schemas';
 import { AuthService } from './services/auth.service';
 
-@Resolver(() => Auth)
+@Resolver(() => User)
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
