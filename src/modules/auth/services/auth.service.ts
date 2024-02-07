@@ -9,13 +9,12 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UsersRepository } from 'src/common/repositories/users.repository';
 import {
+  RefreshTokensInput,
   SignInInput,
   SignOutInput,
-  SignResponse,
   SignUpInput,
-  RefreshTokensInput,
-  SignOutResponse,
 } from '../dtos';
+import { SignOutResponse, SignResponse } from '../models';
 import { HashingService } from './hashing.service';
 
 @Injectable()
@@ -51,7 +50,16 @@ export class AuthService {
     );
 
     await this.updateRefreshToken(user.id, refreshToken);
-    return { accessToken, refreshToken, user };
+
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        email: user.email,
+        username: user.username,
+        role: user.role,
+      },
+    };
   }
 
   public async signIn(signInInput: SignInInput): Promise<SignResponse> {

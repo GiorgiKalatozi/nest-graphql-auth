@@ -1,15 +1,14 @@
 import { HttpCode, HttpStatus, UsePipes } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
-import { User } from '../users/entities/user.entity';
+
 import {
   RefreshTokensInput,
   SignInInput,
   SignOutInput,
-  SignOutResponse,
-  SignResponse,
   SignUpInput,
 } from './dtos';
+import { SignOutResponse, SignResponse, User } from './models';
 import { signInSchema, signUpSchema } from './schemas';
 import { AuthService } from './services/auth.service';
 
