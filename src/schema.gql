@@ -17,12 +17,12 @@ type Mutation {
   removeAuth(id: Int!): Auth!
   removeUser(id: Int!): User!
   signIn(signInInput: SignInInput!): SignResponse!
+  signOut(signOutInput: SignOutInput!): SignOutResponse!
   signUp(signUpInput: SignUpInput!): SignResponse!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 type Query {
-  auth(id: Int!): Auth!
   user(id: Int!): User!
   users: [User!]!
 }
@@ -30,6 +30,14 @@ type Query {
 input SignInInput {
   email: String!
   password: String!
+}
+
+input SignOutInput {
+  user_id: String!
+}
+
+type SignOutResponse {
+  signedOut: Boolean!
 }
 
 type SignResponse {

@@ -7,8 +7,9 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UsersRepository } from 'src/common/repositories/users.repository';
-import { SignInInput, SignResponse, SignUpInput } from '../dtos';
+import { SignInInput, SignOutInput, SignResponse, SignUpInput } from '../dtos';
 import { HashingService } from './hashing.service';
+import { SignOutResponse } from '../dtos/sign-out.output';
 
 @Injectable()
 export class AuthService {
@@ -69,6 +70,18 @@ export class AuthService {
     await this.updateRefreshToken(user.id, refreshToken);
 
     return { accessToken, refreshToken, user };
+  }
+
+  public async signOut(signOutInput: SignOutInput): Promise<SignOutResponse> {
+    const { user_id } = signOutInput;
+    const user = await this.usersRepository.findOne(user_id);
+
+    if (!user.refreshToken) return;
+
+    user.refreshToken = null;
+
+    await this.usersRepository.save(user);
+    return { signedOut: true };
   }
 
   findOne(id: number) {
