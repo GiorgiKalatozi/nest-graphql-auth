@@ -2,11 +2,12 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UsersRepository } from 'src/common/repositories/users.repository';
-import { SignResponse, SignUpInput } from '../dtos';
+import { SignInInput, SignResponse, SignUpInput } from '../dtos';
 import { HashingService } from './hashing.service';
 
 @Injectable()
@@ -45,8 +46,29 @@ export class AuthService {
     return { accessToken, refreshToken, user };
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  public async signIn(signInInput: SignInInput): Promise<SignResponse> {
+    const user = await this.usersRepository.findOneWithEmail(signInInput.email);
+    if (!user) {
+      throw new UnauthorizedException('User does not exists');
+    }
+
+    const passwordMatches = await this.hashingService.compare(
+      signInInput.password,
+      user.password,
+    );
+
+    if (!passwordMatches) {
+      throw new UnauthorizedException('Password does not match');
+    }
+
+    const { accessToken, refreshToken } = await this.createTokens(
+      user.id,
+      user.email,
+    );
+
+    await this.updateRefreshToken(user.id, refreshToken);
+
+    return { accessToken, refreshToken, user };
   }
 
   findOne(id: number) {
@@ -90,12 +112,12 @@ export class AuthService {
   }
 
   private async updateRefreshToken(userId: string, refreshToken: string) {
-    const hashedRefreshToken = await this.hashingService.hash(refreshToken);
     const user = await this.usersRepository.findOne(userId);
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
+    const hashedRefreshToken = await this.hashingService.hash(refreshToken);
 
     user.refreshToken = hashedRefreshToken;
 
