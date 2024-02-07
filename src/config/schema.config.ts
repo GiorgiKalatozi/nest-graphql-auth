@@ -7,8 +7,8 @@ export const configValidationSchema = Joi.object({
   POSTGRES_USER: Joi.string().required(),
   POSTGRES_PASSWORD: Joi.string().required(),
   POSTGRES_DB_NAME: Joi.string().required(),
-  JWT_SECRET: Joi.string().required(),
-  JWT_REFRESH: Joi.string().required(),
-  AT_EXPIRATION_TIME: Joi.number().required(),
-  RT_EXPIRATION_TIME: Joi.number().required(),
+  ACCESS_TOKEN_SECRET: Joi.string().required(),
+  REFRESH_TOKEN_SECRET: Joi.string().required(),
+  ACCESS_TOKEN_EXPIRATION_TIME: Joi.number().required(),
+  REFRESH_TOKEN_EXPIRATION_TIME: Joi.number().required(),
 });

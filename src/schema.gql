@@ -16,7 +16,7 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   removeAuth(id: Int!): Auth!
   removeUser(id: Int!): User!
-  signup(signUpInput: SignUpInput!): SignResponse!
+  signUp(signUpInput: SignUpInput!): SignResponse!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 

@@ -14,8 +14,10 @@ export class AuthResolver {
   @Mutation(() => SignResponse)
   @UsePipes(new JoiValidationPipe(signUpSchema))
   @HttpCode(HttpStatus.CREATED)
-  signup(@Args('signUpInput') signUpInput: SignUpInput) {
-    return this.authService.signup(signUpInput);
+  public signUp(
+    @Args('signUpInput') signUpInput: SignUpInput,
+  ): Promise<SignResponse> {
+    return this.authService.signUp(signUpInput);
   }
 
   @Query(() => [Auth], { name: 'auth' })
