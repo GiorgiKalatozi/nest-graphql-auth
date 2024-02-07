@@ -7,6 +7,7 @@ import { SignUpInput } from './dtos/sign-up.input';
 import { Auth } from './entities/auth.entity';
 import { signInSchema, signUpSchema } from './schemas';
 import { AuthService } from './services/auth.service';
+import { RefreshTokensInput } from './dtos/refresh-tokens.input';
 
 @Resolver(() => Auth)
 export class AuthResolver {
@@ -31,6 +32,13 @@ export class AuthResolver {
   @Mutation(() => SignOutResponse)
   public signOut(@Args('signOutInput') signOutInput: SignOutInput) {
     return this.authService.signOut(signOutInput);
+  }
+
+  @Mutation(() => SignResponse)
+  public refreshTokens(
+    @Args('refreshTokensInput') refreshTokensInput: RefreshTokensInput,
+  ) {
+    return this.authService.refreshTokens(refreshTokensInput);
   }
 
   // @Mutation(() => Auth)

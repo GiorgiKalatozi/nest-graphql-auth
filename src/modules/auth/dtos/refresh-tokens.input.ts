@@ -1,7 +1,10 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class SignOutInput {
+export class RefreshTokensInput {
   @Field()
   userId: string;
+
+  @Field()
+  refreshToken: string;
 }

@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -10,6 +11,7 @@ import { UsersRepository } from 'src/common/repositories/users.repository';
 import { SignInInput, SignOutInput, SignResponse, SignUpInput } from '../dtos';
 import { HashingService } from './hashing.service';
 import { SignOutResponse } from '../dtos/sign-out.output';
+import { RefreshTokensInput } from '../dtos/refresh-tokens.input';
 
 @Injectable()
 export class AuthService {
@@ -73,8 +75,8 @@ export class AuthService {
   }
 
   public async signOut(signOutInput: SignOutInput): Promise<SignOutResponse> {
-    const { user_id } = signOutInput;
-    const user = await this.usersRepository.findOne(user_id);
+    const { userId } = signOutInput;
+    const user = await this.usersRepository.findOne(userId);
 
     if (!user.refreshToken) return;
 
@@ -82,6 +84,32 @@ export class AuthService {
 
     await this.usersRepository.save(user);
     return { signedOut: true };
+  }
+
+  public async refreshTokens(
+    refreshTokensInput: RefreshTokensInput,
+  ): Promise<SignResponse> {
+    const { userId, refreshToken } = refreshTokensInput;
+    const user = await this.usersRepository.findOne(userId);
+
+    if (!user || !user.refreshToken) {
+      throw new ForbiddenException('Access Denied.');
+    }
+
+    const refreshTokenMatches = await this.hashingService.compare(
+      refreshToken,
+      user.refreshToken,
+    );
+
+    if (!refreshTokenMatches) {
+      throw new ForbiddenException('Access Denied.');
+    }
+
+    const tokens = await this.createTokens(user.id, user.email);
+
+    await this.updateRefreshToken(user.id, tokens.refreshToken);
+
+    return { ...tokens, user };
   }
 
   findOne(id: number) {

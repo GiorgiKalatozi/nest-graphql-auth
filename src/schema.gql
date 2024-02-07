@@ -14,6 +14,7 @@ input CreateUserInput {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
+  refreshTokens(refreshTokensInput: RefreshTokensInput!): SignResponse!
   removeAuth(id: Int!): Auth!
   removeUser(id: Int!): User!
   signIn(signInInput: SignInInput!): SignResponse!
@@ -27,13 +28,18 @@ type Query {
   users: [User!]!
 }
 
+input RefreshTokensInput {
+  refreshToken: String!
+  userId: String!
+}
+
 input SignInInput {
   email: String!
   password: String!
 }
 
 input SignOutInput {
-  user_id: String!
+  userId: String!
 }
 
 type SignOutResponse {
