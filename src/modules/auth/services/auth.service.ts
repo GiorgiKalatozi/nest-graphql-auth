@@ -8,10 +8,15 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UsersRepository } from 'src/common/repositories/users.repository';
-import { SignInInput, SignOutInput, SignResponse, SignUpInput } from '../dtos';
+import {
+  SignInInput,
+  SignOutInput,
+  SignResponse,
+  SignUpInput,
+  RefreshTokensInput,
+  SignOutResponse,
+} from '../dtos';
 import { HashingService } from './hashing.service';
-import { SignOutResponse } from '../dtos/sign-out.output';
-import { RefreshTokensInput } from '../dtos/refresh-tokens.input';
 
 @Injectable()
 export class AuthService {

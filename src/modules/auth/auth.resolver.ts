@@ -1,13 +1,17 @@
 import { HttpCode, HttpStatus, UsePipes } from '@nestjs/common';
-import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
-import { SignInInput, SignOutInput, SignResponse } from './dtos';
-import { SignOutResponse } from './dtos/sign-out.output';
-import { SignUpInput } from './dtos/sign-up.input';
+import {
+  RefreshTokensInput,
+  SignInInput,
+  SignOutInput,
+  SignOutResponse,
+  SignResponse,
+  SignUpInput,
+} from './dtos';
 import { Auth } from './entities/auth.entity';
 import { signInSchema, signUpSchema } from './schemas';
 import { AuthService } from './services/auth.service';
-import { RefreshTokensInput } from './dtos/refresh-tokens.input';
 
 @Resolver(() => Auth)
 export class AuthResolver {
