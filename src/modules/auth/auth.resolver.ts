@@ -1,5 +1,5 @@
 import { HttpCode, HttpStatus, UsePipes } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
 import { User } from '../users/entities/user.entity';
 import {
@@ -45,5 +45,10 @@ export class AuthResolver {
     @Args('refreshTokensInput') refreshTokensInput: RefreshTokensInput,
   ) {
     return this.authService.refreshTokens(refreshTokensInput);
+  }
+
+  @Query(() => String)
+  public hello() {
+    return 'hello world';
   }
 }

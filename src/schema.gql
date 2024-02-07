@@ -18,6 +18,7 @@ type Mutation {
 }
 
 type Query {
+  hello: String!
   user(id: Int!): User!
   users: [User!]!
 }
