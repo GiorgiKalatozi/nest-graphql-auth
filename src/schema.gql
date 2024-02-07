@@ -2,11 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Auth {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 input CreateUserInput {
   """Example field (placeholder)"""
   exampleField: Int!
@@ -15,7 +10,6 @@ input CreateUserInput {
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   refreshTokens(refreshTokensInput: RefreshTokensInput!): SignResponse!
-  removeAuth(id: Int!): Auth!
   removeUser(id: Int!): User!
   signIn(signInInput: SignInInput!): SignResponse!
   signOut(signOutInput: SignOutInput!): SignOutResponse!

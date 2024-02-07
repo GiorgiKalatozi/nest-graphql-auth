@@ -30,24 +30,16 @@ export class AuthResolver {
   }
 
   @Mutation(() => SignOutResponse)
+  @HttpCode(HttpStatus.OK)
   public signOut(@Args('signOutInput') signOutInput: SignOutInput) {
     return this.authService.signOut(signOutInput);
   }
 
   @Mutation(() => SignResponse)
+  @HttpCode(HttpStatus.OK)
   public refreshTokens(
     @Args('refreshTokensInput') refreshTokensInput: RefreshTokensInput,
   ) {
     return this.authService.refreshTokens(refreshTokensInput);
-  }
-
-  // @Mutation(() => Auth)
-  // updateAuth(@Args('updateAuthInput') updateAuthInput: UpdateAuthInput) {
-  //   return this.authService.update(updateAuthInput.id, updateAuthInput);
-  // }
-
-  @Mutation(() => Auth)
-  removeAuth(@Args('id', { type: () => Int }) id: number) {
-    return this.authService.remove(id);
   }
 }
