@@ -3,9 +3,10 @@ import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
+import { JwtStrategyName } from '../enums';
 
 @Injectable()
-export class AccessTokenGuard extends AuthGuard('jwt') {
+export class AccessTokenGuard extends AuthGuard(JwtStrategyName.JWT) {
   constructor(private readonly reflector: Reflector) {
     super();
   }

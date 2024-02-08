@@ -122,7 +122,14 @@ export class AuthService {
 
     await this.updateRefreshToken(user.id, tokens.refreshToken);
 
-    return { ...tokens, user };
+    return {
+      ...tokens,
+      user: {
+        email: user.email,
+        username: user.username,
+        role: user.role,
+      },
+    };
   }
 
   private async createTokens(userId: string, email: string) {
