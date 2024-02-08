@@ -11,11 +11,13 @@ import {
 import { SignOutResponse, SignResponse, User } from './models';
 import { signInSchema, signUpSchema } from './schemas';
 import { AuthService } from './services/auth.service';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Resolver(() => User)
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Mutation(() => SignResponse)
   @UsePipes(new JoiValidationPipe(signUpSchema))
   @HttpCode(HttpStatus.CREATED)
@@ -25,6 +27,7 @@ export class AuthResolver {
     return this.authService.signUp(signUpInput);
   }
 
+  @Public()
   @Mutation(() => SignResponse)
   @UsePipes(new JoiValidationPipe(signInSchema))
   @HttpCode(HttpStatus.CREATED)
