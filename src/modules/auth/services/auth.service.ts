@@ -14,7 +14,7 @@ import {
   SignOutInput,
   SignUpInput,
 } from '../dtos';
-import { SignOutResponse, SignResponse } from '../models';
+import { SignOutResponse, SignResponse, TokensResponse } from '../models';
 import { HashingService } from './hashing.service';
 
 @Injectable()
@@ -101,7 +101,7 @@ export class AuthService {
 
   public async refreshTokens(
     refreshTokensInput: RefreshTokensInput,
-  ): Promise<SignResponse> {
+  ): Promise<TokensResponse> {
     const { userId, refreshToken } = refreshTokensInput;
     const user = await this.usersRepository.findOne(userId);
 
@@ -122,14 +122,7 @@ export class AuthService {
 
     await this.updateRefreshToken(user.id, tokens.refreshToken);
 
-    return {
-      ...tokens,
-      user: {
-        email: user.email,
-        username: user.username,
-        role: user.role,
-      },
-    };
+    return tokens;
   }
 
   private async createTokens(userId: string, email: string) {

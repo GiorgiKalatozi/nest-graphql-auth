@@ -1,17 +1,14 @@
-import { HttpCode, HttpStatus, UsePipes } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { HttpCode, HttpStatus, UseGuards, UsePipes } from '@nestjs/common';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { CurrentUserId } from 'src/common/decorators/current-user-id.decorator';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { Public } from 'src/common/decorators/public.decorator';
 import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
-
-import {
-  RefreshTokensInput,
-  SignInInput,
-  SignOutInput,
-  SignUpInput,
-} from './dtos';
-import { SignOutResponse, SignResponse, User } from './models';
+import { SignInInput, SignOutInput, SignUpInput } from './dtos';
+import { SignOutResponse, SignResponse, TokensResponse, User } from './models';
 import { signInSchema, signUpSchema } from './schemas';
 import { AuthService } from './services/auth.service';
-import { Public } from 'src/common/decorators/public.decorator';
+import { RefreshTokenGuard } from './guards';
 
 @Resolver(() => User)
 export class AuthResolver {
@@ -41,16 +38,14 @@ export class AuthResolver {
     return this.authService.signOut(signOutInput);
   }
 
-  @Mutation(() => SignResponse)
+  @Public()
+  @UseGuards(RefreshTokenGuard)
+  @Mutation(() => TokensResponse)
   @HttpCode(HttpStatus.OK)
   public refreshTokens(
-    @Args('refreshTokensInput') refreshTokensInput: RefreshTokensInput,
+    @CurrentUserId() userId: string,
+    @CurrentUser('refreshToken') refreshToken: string,
   ) {
-    return this.authService.refreshTokens(refreshTokensInput);
-  }
-
-  @Query(() => String)
-  public hello() {
-    return 'hello world';
+    return this.authService.refreshTokens({ userId, refreshToken });
   }
 }

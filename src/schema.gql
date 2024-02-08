@@ -9,7 +9,7 @@ input CreateUserInput {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
-  refreshTokens(refreshTokensInput: RefreshTokensInput!): SignResponse!
+  refreshTokens: TokensResponse!
   removeUser(id: Int!): User!
   signIn(signInInput: SignInInput!): SignResponse!
   signOut(signOutInput: SignOutInput!): SignOutResponse!
@@ -18,14 +18,8 @@ type Mutation {
 }
 
 type Query {
-  hello: String!
   user(id: Int!): User!
   users: [User!]!
-}
-
-input RefreshTokensInput {
-  refreshToken: String!
-  userId: String!
 }
 
 input SignInInput {
@@ -50,6 +44,11 @@ input SignUpInput {
   email: String!
   password: String!
   username: String!
+}
+
+type TokensResponse {
+  accessToken: String!
+  refreshToken: String!
 }
 
 input UpdateUserInput {

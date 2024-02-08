@@ -16,7 +16,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
       // extract jwt from authorization header
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       // verify jwt signature
-      secretOrKey: config.get('REFRESH_TOKEN_SECRET'),
+      secretOrKey: config.get<string>('REFRESH_TOKEN_SECRET'),
       //   with this one we have access request object to validate method
       passReqToCallback: true,
     });
