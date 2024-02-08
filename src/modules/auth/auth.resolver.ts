@@ -1,14 +1,13 @@
 import { HttpCode, HttpStatus, UseGuards, UsePipes } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { CurrentUserId } from 'src/common/decorators/current-user-id.decorator';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { CurrentUser, CurrentUserId } from 'src/common/decorators';
 import { Public } from 'src/common/decorators/public.decorator';
 import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
 import { SignInInput, SignOutInput, SignUpInput } from './dtos';
+import { RefreshTokenGuard } from './guards';
 import { SignOutResponse, SignResponse, TokensResponse, User } from './models';
 import { signInSchema, signUpSchema } from './schemas';
 import { AuthService } from './services/auth.service';
-import { RefreshTokenGuard } from './guards';
 
 @Resolver(() => User)
 export class AuthResolver {
