@@ -14,6 +14,7 @@ type Mutation {
   signIn(signInInput: SignInInput!): SignResponse!
   signOut(signOutInput: SignOutInput!): SignOutResponse!
   signUp(signUpInput: SignUpInput!): SignResponse!
+  updatePassword(updatePasswordInput: UpdatePasswordInput!): UpdatePasswordResponse!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
@@ -49,6 +50,17 @@ input SignUpInput {
 type TokensResponse {
   accessToken: String!
   refreshToken: String!
+}
+
+input UpdatePasswordInput {
+  confirmNewPassword: String!
+  currentPassword: String!
+  newPassword: String!
+}
+
+type UpdatePasswordResponse {
+  message: String!
+  success: Boolean!
 }
 
 input UpdateUserInput {

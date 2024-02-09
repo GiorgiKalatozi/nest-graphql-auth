@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
@@ -14,8 +15,14 @@ import {
   SignOutInput,
   SignUpInput,
 } from '../dtos';
-import { SignOutResponse, SignResponse, TokensResponse } from '../models';
+import {
+  SignOutResponse,
+  SignResponse,
+  TokensResponse,
+  UpdatePasswordResponse,
+} from '../models';
 import { HashingService } from './hashing.service';
+import { UpdatePasswordInput } from '../dtos/update-password.input';
 
 @Injectable()
 export class AuthService {
@@ -97,6 +104,43 @@ export class AuthService {
 
     await this.usersRepository.save(user);
     return { signedOut: true };
+  }
+
+  public async updatePassword(
+    updatePasswordInput: UpdatePasswordInput,
+    userId: string,
+  ): Promise<UpdatePasswordResponse> {
+    const { currentPassword, newPassword, confirmNewPassword } =
+      updatePasswordInput;
+
+    const user = await this.usersRepository.findOne(userId);
+
+    if (!user) {
+      throw new UnauthorizedException('User not found.');
+    }
+
+    const currentPasswordValid = await this.hashingService.compare(
+      currentPassword,
+      user.password,
+    );
+
+    if (!currentPasswordValid) {
+      throw new UnauthorizedException('Current password is incorrect.');
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      throw new BadRequestException(
+        'New password and confirm password do not match.',
+      );
+    }
+
+    const hashedPassword = await this.hashingService.hash(newPassword);
+
+    user.password = hashedPassword;
+
+    await this.usersRepository.save(user);
+
+    return { success: true, message: 'Password updated successfully' };
   }
 
   public async refreshTokens(

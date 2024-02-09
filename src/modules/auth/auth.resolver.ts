@@ -4,8 +4,15 @@ import { CurrentUser, CurrentUserId } from 'src/common/decorators';
 import { Public } from 'src/common/decorators/public.decorator';
 import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
 import { SignInInput, SignOutInput, SignUpInput } from './dtos';
+import { UpdatePasswordInput } from './dtos/update-password.input';
 import { RefreshTokenGuard } from './guards';
-import { SignOutResponse, SignResponse, TokensResponse, User } from './models';
+import {
+  SignOutResponse,
+  SignResponse,
+  TokensResponse,
+  UpdatePasswordResponse,
+  User,
+} from './models';
 import { signInSchema, signUpSchema } from './schemas';
 import { AuthService } from './services/auth.service';
 
@@ -37,14 +44,23 @@ export class AuthResolver {
     return this.authService.signOut(signOutInput);
   }
 
+  @Mutation(() => UpdatePasswordResponse)
+  @HttpCode(HttpStatus.CREATED)
+  public updatePassword(
+    @Args('updatePasswordInput') updatePasswordInput: UpdatePasswordInput,
+    @CurrentUser('userId') userId: string,
+  ) {
+    return this.authService.updatePassword(updatePasswordInput, userId);
+  }
+
   @Public()
   @UseGuards(RefreshTokenGuard)
   @Mutation(() => TokensResponse)
   @HttpCode(HttpStatus.OK)
   public refreshTokens(
-    @CurrentUserId() userId: string,
     @CurrentUser('refreshToken') refreshToken: string,
+    @CurrentUserId() userId: string,
   ) {
-    return this.authService.refreshTokens({ userId, refreshToken });
+    return this.authService.refreshTokens({ refreshToken, userId });
   }
 }
