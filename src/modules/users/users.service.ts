@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersRepository } from 'src/common/repositories/users.repository';
 import { User } from '../auth/models';
 import { DeleteUserResponse } from './dto';
+import { Role } from 'src/common/enums';
 
 @Injectable()
 export class UsersService {
@@ -13,6 +14,28 @@ export class UsersService {
 
   public async findOne(id: string): Promise<User> {
     return this.usersRepository.findOne(id);
+  }
+
+  public async assignAdminRole(id: string): Promise<User> {
+    const user = await this.usersRepository.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.role = Role.ADMIN;
+    return this.usersRepository.save(user);
+  }
+
+  public async revokeAdminRole(id: string): Promise<User> {
+    const user = await this.usersRepository.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.role = Role.USER;
+    return this.usersRepository.save(user);
   }
 
   public async remove(id: string): Promise<DeleteUserResponse> {

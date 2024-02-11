@@ -3,8 +3,9 @@
 # ------------------------------------------------------
 
 type Mutation {
+  assignAdminRole(id: String!): User!
   refreshTokens: TokensResponse!
-  removeUser(id: String!): User!
+  revokeAdminRole(id: String!): User!
   signIn(signInInput: SignInInput!): SignResponse!
   signOut(signOutInput: SignOutInput!): SignOutResponse!
   signUp(signUpInput: SignUpInput!): SignResponse!
