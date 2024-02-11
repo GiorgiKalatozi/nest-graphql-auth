@@ -13,11 +13,11 @@ export class UsersRepository {
   }
 
   public async findAll(): Promise<User[]> {
-    return await this.usersRepository.find();
+    return this.usersRepository.find();
   }
 
   public async findOne(id: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { id } });
+    return this.usersRepository.findOne({ where: { id } });
   }
 
   public async findOneWithUsername(username: string): Promise<User> {

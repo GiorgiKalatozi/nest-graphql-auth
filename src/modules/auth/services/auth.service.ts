@@ -54,6 +54,7 @@ export class AuthService {
     const { accessToken, refreshToken } = await this.createTokens(
       user.id,
       user.email,
+      user.role,
     );
 
     await this.updateRefreshToken(user.id, refreshToken);
@@ -87,6 +88,7 @@ export class AuthService {
     const { accessToken, refreshToken } = await this.createTokens(
       user.id,
       user.email,
+      user.role,
     );
 
     await this.updateRefreshToken(user.id, refreshToken);
@@ -162,18 +164,19 @@ export class AuthService {
       throw new ForbiddenException('Access Denied.');
     }
 
-    const tokens = await this.createTokens(user.id, user.email);
+    const tokens = await this.createTokens(user.id, user.email, user.role);
 
     await this.updateRefreshToken(user.id, tokens.refreshToken);
 
     return tokens;
   }
 
-  private async createTokens(userId: string, email: string) {
+  private async createTokens(userId: string, email: string, role: string) {
     const accessToken = this.jwtService.sign(
       {
         userId,
         email,
+        role,
       },
       {
         expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRATION_TIME'),
