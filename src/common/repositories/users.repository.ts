@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteUserResponse } from 'src/modules/users/dto';
+import { DeleteUserResponse } from 'src/modules/users/dtos';
 import { User } from 'src/modules/users/entities/user.entity';
 import { Repository } from 'typeorm';
 

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersRepository } from 'src/common/repositories/users.repository';
 import { User } from '../auth/models';
-import { DeleteUserResponse } from './dto';
+import { DeleteUserResponse } from './dtos';
 import { Role } from 'src/common/enums';
 
 @Injectable()
