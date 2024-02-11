@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteUserResponse } from 'src/modules/users/dto';
 import { User } from 'src/modules/users/entities/user.entity';
 import { Repository } from 'typeorm';
 
@@ -37,7 +38,9 @@ export class UsersRepository {
     return await this.usersRepository.save(user);
   }
 
-  public async remove(id: string): Promise<void> {
-    this.usersRepository.delete({ id });
+  public async remove(id: string): Promise<DeleteUserResponse> {
+    await this.usersRepository.delete({ id });
+
+    return { success: true, message: 'User removed successfully' };
   }
 }

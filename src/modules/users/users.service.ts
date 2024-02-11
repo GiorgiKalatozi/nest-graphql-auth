@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersRepository } from 'src/common/repositories/users.repository';
 import { User } from '../auth/models';
+import { DeleteUserResponse } from './dto';
 
 @Injectable()
 export class UsersService {
@@ -14,7 +15,13 @@ export class UsersService {
     return this.usersRepository.findOne(id);
   }
 
-  public async remove(id: string) {
-    this.usersRepository.remove(id);
+  public async remove(id: string): Promise<DeleteUserResponse> {
+    const existingUser = await this.usersRepository.findOne(id);
+
+    if (!existingUser) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.usersRepository.remove(id);
   }
 }

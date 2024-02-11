@@ -4,6 +4,7 @@ import { Roles } from 'src/common/decorators';
 import { Role } from 'src/common/enums';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { User } from '../auth/models';
+import { DeleteUserResponse } from './dto';
 import { UsersService } from './users.service';
 
 @Resolver(() => User)
@@ -13,19 +14,19 @@ export class UsersResolver {
   @Query(() => [User], { name: 'users' })
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
-  public findAll() {
+  public findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Query(() => User, { name: 'user' })
   @Roles(Role.ADMIN)
-  public findOne(@Args('id') id: string) {
+  public findOne(@Args('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
 
   @Mutation(() => User)
   @Roles(Role.ADMIN)
-  public removeUser(@Args('id') id: string) {
+  public removeUser(@Args('id') id: string): Promise<DeleteUserResponse> {
     return this.usersService.remove(id);
   }
 }
