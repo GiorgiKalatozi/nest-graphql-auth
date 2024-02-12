@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { AccessTokenGuard } from './auth/guards/access-token.guard';
 import { UsersModule } from './users/users.module';
 import { WorkspacesModule } from './workspaces/workspaces.module';
+import { ChatsModule } from './chats/chats.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { WorkspacesModule } from './workspaces/workspaces.module';
     AuthModule,
     UsersModule,
     WorkspacesModule,
+    ChatsModule,
   ],
   controllers: [],
   providers: [
