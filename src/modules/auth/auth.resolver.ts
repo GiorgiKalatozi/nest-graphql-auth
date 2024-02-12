@@ -1,5 +1,5 @@
 import { HttpCode, HttpStatus, UseGuards, UsePipes } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { CurrentUser, CurrentUserId } from 'src/common/decorators';
 import { Public } from 'src/common/decorators/public.decorator';
 import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
@@ -62,10 +62,5 @@ export class AuthResolver {
     @CurrentUserId() userId: string,
   ) {
     return this.authService.refreshTokens({ refreshToken, userId });
-  }
-
-  @Query(() => String)
-  hello() {
-    return 'hello world';
   }
 }
