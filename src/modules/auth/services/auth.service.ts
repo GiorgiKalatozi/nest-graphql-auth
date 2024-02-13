@@ -8,13 +8,14 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { UsersRepository } from 'src/common/repositories/users.repository';
+import { UsersRepository } from 'src/modules/users/repositories/users.repository';
 import {
   RefreshTokensInput,
   SignInInput,
   SignOutInput,
   SignUpInput,
 } from '../dtos';
+import { UpdatePasswordInput } from '../dtos/update-password.input';
 import {
   SignOutResponse,
   SignResponse,
@@ -22,7 +23,6 @@ import {
   UpdatePasswordResponse,
 } from '../models';
 import { HashingService } from './hashing.service';
-import { UpdatePasswordInput } from '../dtos/update-password.input';
 
 @Injectable()
 export class AuthService {

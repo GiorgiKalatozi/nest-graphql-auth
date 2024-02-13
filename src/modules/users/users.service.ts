@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UsersRepository } from 'src/common/repositories/users.repository';
+import { Role } from 'src/common/enums';
+import { UsersRepository } from 'src/modules/users/repositories/users.repository';
 import { User } from '../auth/models';
 import { DeleteUserResponse } from './dtos';
-import { Role } from 'src/common/enums';
 
 @Injectable()
 export class UsersService {

@@ -1,7 +1,19 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
+import { CommonEntity } from 'src/common/entities/common.entity';
+import { Message } from 'src/modules/messages/entities/message.entity';
+import { User } from 'src/modules/users/entities/user.entity';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
+@Entity()
 @ObjectType()
-export class Chat {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+export class Chat extends CommonEntity {
+  @Column()
+  @Field()
+  name: string;
+
+  @ManyToOne(() => User, (user) => user.createdChats)
+  createdBy: User;
+
+  @OneToMany(() => Message, (message) => message.chat)
+  messages: Message[];
 }

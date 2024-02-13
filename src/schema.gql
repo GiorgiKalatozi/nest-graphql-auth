@@ -2,19 +2,57 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Chat {
+  name: String!
+}
+
+input CreateChatInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateMessageInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateWorkspaceInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Message {
+  content: String!
+}
+
 type Mutation {
   assignAdminRole(id: String!): User!
+  createChat(createChatInput: CreateChatInput!): Chat!
+  createMessage(createMessageInput: CreateMessageInput!): Message!
+  createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   refreshTokens: TokensResponse!
+  removeChat(id: Int!): Chat!
+  removeMessage(id: Int!): Message!
+  removeWorkspace(id: Int!): Workspace!
   revokeAdminRole(id: String!): User!
   signIn(signInInput: SignInInput!): SignResponse!
   signOut(signOutInput: SignOutInput!): SignOutResponse!
   signUp(signUpInput: SignUpInput!): SignResponse!
+  updateChat(updateChatInput: UpdateChatInput!): Chat!
+  updateMessage(updateMessageInput: UpdateMessageInput!): Message!
   updatePassword(updatePasswordInput: UpdatePasswordInput!): UpdatePasswordResponse!
+  updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): Workspace!
 }
 
 type Query {
+  chat(id: Int!): Chat!
+  chats: [Chat!]!
+  message(id: Int!): Message!
+  messages: [Message!]!
   user(id: String!): User!
   users: [User!]!
+  workspace(id: Int!): Workspace!
+  workspaces: [Workspace!]!
 }
 
 input SignInInput {
@@ -46,6 +84,18 @@ type TokensResponse {
   refreshToken: String!
 }
 
+input UpdateChatInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateMessageInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
 input UpdatePasswordInput {
   confirmNewPassword: String!
   currentPassword: String!
@@ -57,8 +107,19 @@ type UpdatePasswordResponse {
   success: Boolean!
 }
 
+input UpdateWorkspaceInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
 type User {
   email: String!
   role: String!
   username: String!
+}
+
+type Workspace {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }

@@ -21,11 +21,12 @@ export class UsersRepository {
     return this.usersRepository.findOne({ where: { id } });
   }
 
-  public async findOneWithUsername(username: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { email: username } });
+  public findOneWithUsername(username: string): Promise<User> {
+    return this.usersRepository.findOne({ where: { email: username } });
   }
-  public async findOneWithEmail(email: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { email: email } });
+
+  public findOneWithEmail(email: string): Promise<User> {
+    return this.usersRepository.findOne({ where: { email: email } });
   }
 
   public async update(id: string, user: User): Promise<User> {
@@ -34,7 +35,7 @@ export class UsersRepository {
     return userToUpdate;
   }
 
-  public async save(user: User) {
+  public async save(user: User): Promise<User> {
     return await this.usersRepository.save(user);
   }
 
