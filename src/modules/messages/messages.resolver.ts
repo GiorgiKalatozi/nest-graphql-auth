@@ -19,7 +19,7 @@ export class MessagesResolver {
   }
 
   @Query(() => [Message], { name: 'messages' })
-  findAll() {
+  public async findAll() {
     return this.messagesService.findAll();
   }
 

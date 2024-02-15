@@ -25,8 +25,8 @@ export class MessagesService {
     return this.messagesRepository.save(message);
   }
 
-  findAll() {
-    return `This action returns all messages`;
+  public async findAll() {
+    return this.messagesRepository.findAll();
   }
 
   findOne(id: number) {

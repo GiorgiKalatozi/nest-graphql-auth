@@ -19,7 +19,7 @@ export class ChatsResolver {
   }
 
   @Query(() => [Chat], { name: 'chats' })
-  findAll() {
+  public findAll() {
     return this.chatsService.findAll();
   }
 
