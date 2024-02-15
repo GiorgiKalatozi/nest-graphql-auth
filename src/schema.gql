@@ -7,8 +7,7 @@ type Chat {
 }
 
 input CreateChatInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
 }
 
 input CreateMessageInput {
@@ -31,7 +30,7 @@ type Mutation {
   createMessage(createMessageInput: CreateMessageInput!): Message!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   refreshTokens: TokensResponse!
-  removeChat(id: Int!): Chat!
+  removeChat(id: String!): Chat!
   removeMessage(id: Int!): Message!
   removeWorkspace(id: Int!): Workspace!
   revokeAdminRole(id: String!): User!
@@ -45,7 +44,7 @@ type Mutation {
 }
 
 type Query {
-  chat(id: Int!): Chat!
+  chat(id: String!): Chat!
   chats: [Chat!]!
   message(id: Int!): Message!
   messages: [Message!]!
@@ -85,9 +84,8 @@ type TokensResponse {
 }
 
 input UpdateChatInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  id: String!
+  name: String
 }
 
 input UpdateMessageInput {

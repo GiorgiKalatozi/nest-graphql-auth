@@ -12,7 +12,7 @@ export class Chat extends CommonEntity {
   name: string;
 
   @ManyToOne(() => User, (user) => user.createdChats)
-  createdBy: User;
+  user: Partial<User>;
 
   @OneToMany(() => Message, (message) => message.chat)
   messages: Message[];

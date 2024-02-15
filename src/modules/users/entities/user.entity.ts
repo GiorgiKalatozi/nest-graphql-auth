@@ -32,7 +32,7 @@ export class User extends CommonEntity {
   @Field(() => [Message])
   messages: Message[];
 
-  @OneToMany(() => Chat, (chat) => chat.createdBy)
+  @OneToMany(() => Chat, (chat) => chat.user)
   @Field(() => [Chat])
   createdChats: Chat[];
 }
