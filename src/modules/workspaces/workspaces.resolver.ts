@@ -18,7 +18,7 @@ export class WorkspacesResolver {
   }
 
   @Query(() => [Workspace], { name: 'workspaces' })
-  findAll() {
+  public findAll() {
     return this.workspacesService.findAll();
   }
 

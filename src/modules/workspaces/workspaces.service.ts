@@ -18,8 +18,8 @@ export class WorkspacesService {
     return this.workspacesRepository.save(workspace);
   }
 
-  findAll() {
-    return `This action returns all workspaces`;
+  public findAll() {
+    return this.workspacesRepository.findAll();
   }
 
   findOne(id: number) {
