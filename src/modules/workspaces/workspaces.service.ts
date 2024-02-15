@@ -1,11 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { CreateWorkspaceInput } from './dtos/create-workspace.input';
 import { UpdateWorkspaceInput } from './dtos/update-workspace.input';
+import { WorkspacesRepository } from './workspaces.repository';
 
 @Injectable()
 export class WorkspacesService {
-  create(createWorkspaceInput: CreateWorkspaceInput) {
-    return 'This action adds a new workspace';
+  constructor(private readonly workspacesRepository: WorkspacesRepository) {}
+  public async create(
+    createWorkspaceInput: CreateWorkspaceInput,
+    userId: string,
+  ) {
+    const workspace = await this.workspacesRepository.create({
+      ...createWorkspaceInput,
+      user: { id: userId },
+    });
+
+    return this.workspacesRepository.save(workspace);
   }
 
   findAll() {
@@ -17,6 +27,7 @@ export class WorkspacesService {
   }
 
   update(id: number, updateWorkspaceInput: UpdateWorkspaceInput) {
+    console.log(updateWorkspaceInput);
     return `This action updates a #${id} workspace`;
   }
 

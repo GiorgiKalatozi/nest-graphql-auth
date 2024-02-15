@@ -3,7 +3,8 @@ import { CommonEntity } from 'src/common/entities/common.entity';
 import { Role } from 'src/common/enums/role.enum';
 import { Chat } from 'src/modules/chats/entities/chat.entity';
 import { Message } from 'src/modules/messages/entities/message.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Workspace } from 'src/modules/workspaces/entities/workspace.entity';
+import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -35,4 +36,10 @@ export class User extends CommonEntity {
   @OneToMany(() => Chat, (chat) => chat.user)
   @Field(() => [Chat])
   createdChats: Chat[];
+
+  @ManyToMany(() => Workspace, (workspace) => workspace.chats)
+  workspaces: Workspace[];
+
+  @OneToMany(() => Workspace, (workspace) => workspace.user)
+  workspaceCreator: Workspace[];
 }

@@ -3,16 +3,18 @@ import { CreateWorkspaceInput } from './dtos/create-workspace.input';
 import { UpdateWorkspaceInput } from './dtos/update-workspace.input';
 import { Workspace } from './entities/workspace.entity';
 import { WorkspacesService } from './workspaces.service';
+import { CurrentUserId } from 'src/common/decorators';
 
 @Resolver(() => Workspace)
 export class WorkspacesResolver {
   constructor(private readonly workspacesService: WorkspacesService) {}
 
   @Mutation(() => Workspace)
-  createWorkspace(
+  public createWorkspace(
     @Args('createWorkspaceInput') createWorkspaceInput: CreateWorkspaceInput,
+    @CurrentUserId() userId: string,
   ) {
-    return this.workspacesService.create(createWorkspaceInput);
+    return this.workspacesService.create(createWorkspaceInput, userId);
   }
 
   @Query(() => [Workspace], { name: 'workspaces' })

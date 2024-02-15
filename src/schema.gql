@@ -15,8 +15,7 @@ input CreateMessageInput {
 }
 
 input CreateWorkspaceInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
 }
 
 type Message {
@@ -104,9 +103,8 @@ type UpdatePasswordResponse {
 }
 
 input UpdateWorkspaceInput {
-  """Example field (placeholder)"""
-  exampleField: Int
   id: Int!
+  name: String
 }
 
 type User {
@@ -116,6 +114,5 @@ type User {
 }
 
 type Workspace {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
 }
