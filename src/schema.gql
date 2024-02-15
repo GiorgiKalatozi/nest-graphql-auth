@@ -4,6 +4,7 @@
 
 type Chat {
   name: String!
+  type: String!
 }
 
 input CreateChatInput {

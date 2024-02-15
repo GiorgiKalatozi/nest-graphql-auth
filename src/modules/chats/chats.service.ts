@@ -24,8 +24,8 @@ export class ChatsService {
     return this.chatsRepository.save(chat);
   }
 
-  findAll() {
-    return `This action returns all chats`;
+  public async findAll() {
+    return this.chatsRepository.findAll();
   }
 
   findOne(id: string) {
