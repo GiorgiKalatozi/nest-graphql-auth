@@ -6,11 +6,18 @@ import { ChatsRepository } from './chats.repository';
 @Injectable()
 export class ChatsService {
   constructor(private readonly chatsRepository: ChatsRepository) {}
-  public async create(createChatInput: CreateChatInput, userId: string) {
+  public async create(
+    createChatInput: CreateChatInput,
+    workspaceId: string,
+    userId: string,
+  ) {
     const chat = await this.chatsRepository.create({
       ...createChatInput,
       user: {
         id: userId,
+      },
+      workspace: {
+        id: workspaceId,
       },
     });
 

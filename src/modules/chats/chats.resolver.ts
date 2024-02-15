@@ -12,9 +12,10 @@ export class ChatsResolver {
   @Mutation(() => Chat)
   public createChat(
     @Args('createChatInput') createChatInput: CreateChatInput,
+    @Args('workspaceId') workspaceId: string,
     @CurrentUserId() userId: string,
   ): Promise<Chat> {
-    return this.chatsService.create(createChatInput, userId);
+    return this.chatsService.create(createChatInput, workspaceId, userId);
   }
 
   @Query(() => [Chat], { name: 'chats' })

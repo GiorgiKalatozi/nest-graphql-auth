@@ -16,7 +16,7 @@ export class Chat extends CommonEntity {
   user: Partial<User>;
 
   @ManyToOne(() => Workspace, (workspace) => workspace.chats)
-  workspace: Workspace;
+  workspace: Partial<Workspace>;
 
   @OneToMany(() => Message, (message) => message.chat)
   messages: Message[];

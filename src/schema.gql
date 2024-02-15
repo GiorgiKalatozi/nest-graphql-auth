@@ -24,7 +24,7 @@ type Message {
 
 type Mutation {
   assignAdminRole(id: String!): User!
-  createChat(createChatInput: CreateChatInput!): Chat!
+  createChat(createChatInput: CreateChatInput!, workspaceId: String!): Chat!
   createMessage(chatId: String!, createMessageInput: CreateMessageInput!): Message!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   refreshTokens: TokensResponse!
