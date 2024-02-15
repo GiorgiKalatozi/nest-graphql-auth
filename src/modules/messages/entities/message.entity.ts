@@ -12,8 +12,8 @@ export class Message extends CommonEntity {
   content: string;
 
   @ManyToOne(() => User, (user) => user.messages)
-  user: User;
+  user: Partial<User>;
 
   @ManyToOne(() => Chat, (chat) => chat.messages)
-  chat: Chat;
+  chat: Partial<Chat>;
 }

@@ -1,11 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMessageInput } from './dtos/create-message.input';
 import { UpdateMessageInput } from './dtos/update-message.input';
+import { Message } from './entities/message.entity';
+import { MessagesRepository } from './messages.repository';
 
 @Injectable()
 export class MessagesService {
-  create(createMessageInput: CreateMessageInput) {
-    return 'This action adds a new message';
+  constructor(private readonly messagesRepository: MessagesRepository) {}
+  public async create(
+    createMessageInput: CreateMessageInput,
+    chatId: string,
+    userId: string,
+  ): Promise<Message> {
+    const message = await this.messagesRepository.create({
+      ...createMessageInput,
+      chat: {
+        id: chatId,
+      },
+      user: {
+        id: userId,
+      },
+    });
+
+    return this.messagesRepository.save(message);
   }
 
   findAll() {
@@ -17,6 +34,7 @@ export class MessagesService {
   }
 
   update(id: number, updateMessageInput: UpdateMessageInput) {
+    console.log(updateMessageInput);
     return `This action updates a #${id} message`;
   }
 

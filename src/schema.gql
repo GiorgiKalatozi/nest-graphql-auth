@@ -11,8 +11,7 @@ input CreateChatInput {
 }
 
 input CreateMessageInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  content: String!
 }
 
 input CreateWorkspaceInput {
@@ -27,7 +26,7 @@ type Message {
 type Mutation {
   assignAdminRole(id: String!): User!
   createChat(createChatInput: CreateChatInput!): Chat!
-  createMessage(createMessageInput: CreateMessageInput!): Message!
+  createMessage(chatId: String!, createMessageInput: CreateMessageInput!): Message!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   refreshTokens: TokensResponse!
   removeChat(id: String!): Chat!
@@ -89,8 +88,7 @@ input UpdateChatInput {
 }
 
 input UpdateMessageInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  content: String
   id: Int!
 }
 

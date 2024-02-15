@@ -1,8 +1,9 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { MessagesService } from './messages.service';
-import { Message } from './entities/message.entity';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CurrentUserId } from 'src/common/decorators';
 import { CreateMessageInput } from './dtos/create-message.input';
 import { UpdateMessageInput } from './dtos/update-message.input';
+import { Message } from './entities/message.entity';
+import { MessagesService } from './messages.service';
 
 @Resolver(() => Message)
 export class MessagesResolver {
@@ -11,8 +12,10 @@ export class MessagesResolver {
   @Mutation(() => Message)
   createMessage(
     @Args('createMessageInput') createMessageInput: CreateMessageInput,
+    @Args('chatId') chatId: string,
+    @CurrentUserId() userId: string,
   ) {
-    return this.messagesService.create(createMessageInput);
+    return this.messagesService.create(createMessageInput, chatId, userId);
   }
 
   @Query(() => [Message], { name: 'messages' })
