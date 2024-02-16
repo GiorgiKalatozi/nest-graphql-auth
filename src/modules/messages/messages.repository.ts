@@ -22,6 +22,18 @@ export class MessagesRepository {
     return this.messagesRepository.findOne({ where: { id } });
   }
 
+  public async find(data: unknown) {
+    return this.messagesRepository.find(data);
+  }
+
+  public async findAndCount(data: unknown) {
+    return this.messagesRepository.findAndCount(data);
+  }
+
+  public async count() {
+    return this.messagesRepository.count();
+  }
+
   public async update(id: string, message: Message): Promise<Message> {
     const messageToUpdate = await this.messagesRepository.findOne({
       where: { id },

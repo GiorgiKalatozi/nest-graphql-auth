@@ -3,6 +3,7 @@ import { CreateMessageInput } from './dtos/create-message.input';
 import { UpdateMessageInput } from './dtos/update-message.input';
 import { Message } from './entities/message.entity';
 import { MessagesRepository } from './messages.repository';
+import { PaginationInput } from './dtos/pagination.input';
 
 @Injectable()
 export class MessagesService {
@@ -25,8 +26,20 @@ export class MessagesService {
     return this.messagesRepository.save(message);
   }
 
+  public async getMessages(pagination: PaginationInput): Promise<Message[]> {
+    const { skip, take } = pagination;
+    return this.messagesRepository.find({
+      skip,
+      take,
+    });
+  }
+
   public async findAll() {
     return this.messagesRepository.findAll();
+  }
+
+  public count() {
+    return this.messagesRepository.count();
   }
 
   findOne(id: number) {

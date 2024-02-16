@@ -42,11 +42,17 @@ type Mutation {
   updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): Workspace!
 }
 
+input PaginationInput {
+  skip: Int! = 0
+  take: Int! = 25
+}
+
 type Query {
   chat(id: String!): Chat!
   chats: [Chat!]!
   message(id: Int!): Message!
   messages: [Message!]!
+  paginateMessages(pagination: PaginationInput!): [Message!]!
   user(id: String!): User!
   users: [User!]!
   workspace(id: Int!): Workspace!

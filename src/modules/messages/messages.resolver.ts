@@ -4,6 +4,7 @@ import { CreateMessageInput } from './dtos/create-message.input';
 import { UpdateMessageInput } from './dtos/update-message.input';
 import { Message } from './entities/message.entity';
 import { MessagesService } from './messages.service';
+import { PaginationInput } from './dtos/pagination.input';
 
 @Resolver(() => Message)
 export class MessagesResolver {
@@ -21,6 +22,13 @@ export class MessagesResolver {
   @Query(() => [Message], { name: 'messages' })
   public async findAll() {
     return this.messagesService.findAll();
+  }
+
+  @Query(() => [Message], { name: 'paginateMessages' })
+  public async getMessages(
+    @Args('pagination') pagination: PaginationInput,
+  ): Promise<Message[]> {
+    return this.messagesService.getMessages(pagination);
   }
 
   @Query(() => Message, { name: 'message' })
