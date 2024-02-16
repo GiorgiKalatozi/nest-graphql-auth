@@ -30,7 +30,7 @@ type Mutation {
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   refreshTokens: TokensResponse!
   removeChat(id: String!): Chat!
-  removeMessage(id: Int!): Message!
+  removeMessage(id: String!): Message!
   removeWorkspace(id: Int!): Workspace!
   revokeAdminRole(id: String!): User!
   signIn(signInInput: SignInInput!): SignResponse!
@@ -90,6 +90,7 @@ input SignUpInput {
 
 type Subscription {
   messageAdded: Message!
+  messageRemoved: Message!
 }
 
 type TokensResponse {

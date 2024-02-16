@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
 import { CreateMessageInput } from './dtos/create-message.input';
 import { PaginationInput } from './dtos/pagination.input';
@@ -74,7 +74,14 @@ export class MessagesService {
     return `This action updates a #${id} message`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} message`;
+  public async remove(id: string) {
+    const deleteResult = await this.messagesRepository.remove(id);
+
+    if (!deleteResult) {
+      throw new NotFoundException(`Message with ID ${id} not found.`);
+    }
+
+    this.pubSub.publish('messageRemoved', { messageRemoved: deleteResult });
+    return 'message was deleted successfully';
   }
 }

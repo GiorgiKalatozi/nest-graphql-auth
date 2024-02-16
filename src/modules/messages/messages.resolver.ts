@@ -58,12 +58,17 @@ export class MessagesResolver {
   }
 
   @Mutation(() => Message)
-  removeMessage(@Args('id', { type: () => Int }) id: number) {
+  removeMessage(@Args('id') id: string) {
     return this.messagesService.remove(id);
   }
 
   @Subscription(() => Message)
   public messageAdded() {
     return this.pubSub.asyncIterator('messageAdded');
+  }
+
+  @Subscription(() => Message)
+  public messageRemoved() {
+    return this.pubSub.asyncIterator('messageRemoved');
   }
 }

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, Repository } from 'typeorm';
-import { DeleteUserResponse } from '../users/dtos';
 import { Message } from './entities/message.entity';
 
 @Injectable()
@@ -50,9 +49,9 @@ export class MessagesRepository {
     return await this.messagesRepository.save(message);
   }
 
-  public async remove(id: string): Promise<DeleteUserResponse> {
-    await this.messagesRepository.delete({ id });
+  public async remove(id: string): Promise<boolean> {
+    const result = await this.messagesRepository.delete({ id });
 
-    return { success: true, message: 'Message removed successfully' };
+    return !!result.affected;
   }
 }
