@@ -27,13 +27,17 @@ export class MessagesService {
   }
 
   public async getMessages(pagination: PaginationInput): Promise<Message[]> {
-    const { skip, take, limit } = pagination;
+    const { skip, take, limit, sortBy, sortOrder } = pagination;
+
     const actualTake = limit ? Math.min(take, limit) : take;
 
-    return this.messagesRepository.find({
-      skip,
-      take: actualTake,
-    });
+    const queryBuilder = this.messagesRepository.createQueryBuilder('message');
+
+    if (sortBy) {
+      queryBuilder.orderBy(`message.${sortBy}`, sortOrder || 'ASC');
+    }
+
+    return queryBuilder.skip(skip).take(actualTake).getMany();
   }
 
   public async findAll() {

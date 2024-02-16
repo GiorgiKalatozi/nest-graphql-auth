@@ -45,6 +45,8 @@ type Mutation {
 input PaginationInput {
   limit: Int
   skip: Int! = 0
+  sortBy: String
+  sortOrder: String
   take: Int! = 25
 }
 

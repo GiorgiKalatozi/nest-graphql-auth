@@ -34,6 +34,10 @@ export class MessagesRepository {
     return this.messagesRepository.count();
   }
 
+  public createQueryBuilder(name: string) {
+    return this.messagesRepository.createQueryBuilder(name);
+  }
+
   public async update(id: string, message: Message): Promise<Message> {
     const messageToUpdate = await this.messagesRepository.findOne({
       where: { id },
