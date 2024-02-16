@@ -7,4 +7,7 @@ export class PaginationInput {
 
   @Field(() => Int)
   take = 25;
+
+  @Field(() => Int, { nullable: true })
+  limit?: number;
 }

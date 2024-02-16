@@ -27,10 +27,12 @@ export class MessagesService {
   }
 
   public async getMessages(pagination: PaginationInput): Promise<Message[]> {
-    const { skip, take } = pagination;
+    const { skip, take, limit } = pagination;
+    const actualTake = limit ? Math.min(take, limit) : take;
+
     return this.messagesRepository.find({
       skip,
-      take,
+      take: actualTake,
     });
   }
 

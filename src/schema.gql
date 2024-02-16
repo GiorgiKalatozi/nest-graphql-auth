@@ -43,6 +43,7 @@ type Mutation {
 }
 
 input PaginationInput {
+  limit: Int
   skip: Int! = 0
   take: Int! = 25
 }
