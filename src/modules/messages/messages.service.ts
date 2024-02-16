@@ -5,6 +5,7 @@ import { PaginationInput } from './dtos/pagination.input';
 import { UpdateMessageInput } from './dtos/update-message.input';
 import { Message } from './entities/message.entity';
 import { MessagesRepository } from './messages.repository';
+import { FindManyOptions } from 'typeorm';
 
 @Injectable()
 export class MessagesService {
@@ -54,6 +55,10 @@ export class MessagesService {
 
   public async findAll() {
     return this.messagesRepository.findAll();
+  }
+
+  public async find(data: FindManyOptions<Message>) {
+    return this.messagesRepository.find(data);
   }
 
   public count() {

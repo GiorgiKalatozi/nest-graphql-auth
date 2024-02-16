@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { DeleteUserResponse } from '../users/dtos';
 import { Message } from './entities/message.entity';
 
@@ -22,8 +22,8 @@ export class MessagesRepository {
     return this.messagesRepository.findOne({ where: { id } });
   }
 
-  public async find(data: unknown) {
-    return this.messagesRepository.find(data);
+  public async find(options?: FindManyOptions<Message>) {
+    return this.messagesRepository.find(options);
   }
 
   public async findAndCount(data: unknown) {
