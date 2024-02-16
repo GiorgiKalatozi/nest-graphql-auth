@@ -1,17 +1,28 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Subscription,
+} from '@nestjs/graphql';
+import { PubSub } from 'graphql-subscriptions';
 import { CurrentUserId } from 'src/common/decorators';
 import { CreateMessageInput } from './dtos/create-message.input';
+import { PaginationInput } from './dtos/pagination.input';
 import { UpdateMessageInput } from './dtos/update-message.input';
 import { Message } from './entities/message.entity';
 import { MessagesService } from './messages.service';
-import { PaginationInput } from './dtos/pagination.input';
 
 @Resolver(() => Message)
 export class MessagesResolver {
-  constructor(private readonly messagesService: MessagesService) {}
+  constructor(
+    private readonly messagesService: MessagesService,
+    private readonly pubSub: PubSub,
+  ) {}
 
   @Mutation(() => Message)
-  createMessage(
+  public async createMessage(
     @Args('createMessageInput') createMessageInput: CreateMessageInput,
     @Args('chatId') chatId: string,
     @CurrentUserId() userId: string,
@@ -49,5 +60,10 @@ export class MessagesResolver {
   @Mutation(() => Message)
   removeMessage(@Args('id', { type: () => Int }) id: number) {
     return this.messagesService.remove(id);
+  }
+
+  @Subscription(() => Message)
+  public messageAdded() {
+    return this.pubSub.asyncIterator('messageAdded');
   }
 }

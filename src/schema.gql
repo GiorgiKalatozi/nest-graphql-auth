@@ -88,6 +88,10 @@ input SignUpInput {
   username: String!
 }
 
+type Subscription {
+  messageAdded: Message!
+}
+
 type TokensResponse {
   accessToken: String!
   refreshToken: String!
