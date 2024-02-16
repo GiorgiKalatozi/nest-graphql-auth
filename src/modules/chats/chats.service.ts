@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateChatInput } from './dtos/create-chat.input';
 import { UpdateChatInput } from './dtos/update-chat.input';
 import { ChatsRepository } from './chats.repository';
+import { PaginationInput } from '../messages/dtos/pagination.input';
+import { Chat } from './entities/chat.entity';
 
 @Injectable()
 export class ChatsService {
@@ -26,6 +28,26 @@ export class ChatsService {
 
   public async findAll() {
     return this.chatsRepository.findAll();
+  }
+
+  public async paginateChats(pagination: PaginationInput): Promise<Chat[]> {
+    const { skip, take, limit, sortBy, sortOrder, search } = pagination;
+
+    const actualTake = limit ? Math.min(take, limit) : take;
+
+    const queryBuilder = this.chatsRepository.createQueryBuilder('chat');
+
+    if (sortBy) {
+      queryBuilder.orderBy(`chat.${sortBy}`, sortOrder || 'ASC');
+    }
+
+    if (search) {
+      queryBuilder.where('chat.content LIKE :search', {
+        search: `%${search}%`,
+      });
+    }
+
+    return queryBuilder.skip(skip).take(actualTake).getMany();
   }
 
   findOne(id: string) {

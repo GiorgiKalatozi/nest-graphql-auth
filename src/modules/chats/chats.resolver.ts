@@ -4,6 +4,7 @@ import { ChatsService } from './chats.service';
 import { CreateChatInput } from './dtos/create-chat.input';
 import { UpdateChatInput } from './dtos/update-chat.input';
 import { Chat } from './entities/chat.entity';
+import { PaginationInput } from '../messages/dtos/pagination.input';
 
 @Resolver(() => Chat)
 export class ChatsResolver {
@@ -16,6 +17,13 @@ export class ChatsResolver {
     @CurrentUserId() userId: string,
   ): Promise<Chat> {
     return this.chatsService.create(createChatInput, workspaceId, userId);
+  }
+
+  @Query(() => [Chat])
+  public async paginateChats(
+    @Args('pagination') pagination: PaginationInput,
+  ): Promise<Chat[]> {
+    return this.chatsService.paginateChats(pagination);
   }
 
   @Query(() => [Chat], { name: 'chats' })

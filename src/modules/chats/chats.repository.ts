@@ -21,6 +21,10 @@ export class ChatsRepository {
     return this.chatsRepository.findOne({ where: { id } });
   }
 
+  public createQueryBuilder(name: string) {
+    return this.chatsRepository.createQueryBuilder(name);
+  }
+
   public async update(id: string, chat: Chat): Promise<Chat> {
     const chatToUpdate = await this.chatsRepository.findOne({ where: { id } });
     await this.chatsRepository.update(id, chat);
