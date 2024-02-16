@@ -44,6 +44,7 @@ type Mutation {
 
 input PaginationInput {
   limit: Int
+  search: String
   skip: Int! = 0
   sortBy: String
   sortOrder: String

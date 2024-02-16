@@ -16,4 +16,7 @@ export class PaginationInput {
 
   @Field(() => String, { nullable: true })
   sortOrder?: 'ASC' | 'DESC';
+
+  @Field(() => String, { nullable: true })
+  search?: string;
 }

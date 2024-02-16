@@ -27,7 +27,7 @@ export class MessagesService {
   }
 
   public async getMessages(pagination: PaginationInput): Promise<Message[]> {
-    const { skip, take, limit, sortBy, sortOrder } = pagination;
+    const { skip, take, limit, sortBy, sortOrder, search } = pagination;
 
     const actualTake = limit ? Math.min(take, limit) : take;
 
@@ -35,6 +35,12 @@ export class MessagesService {
 
     if (sortBy) {
       queryBuilder.orderBy(`message.${sortBy}`, sortOrder || 'ASC');
+    }
+
+    if (search) {
+      queryBuilder.where('message.content LIKE :search', {
+        search: `%${search}%`,
+      });
     }
 
     return queryBuilder.skip(skip).take(actualTake).getMany();
