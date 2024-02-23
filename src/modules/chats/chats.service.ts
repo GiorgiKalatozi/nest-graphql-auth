@@ -1,13 +1,22 @@
 import { Injectable } from '@nestjs/common';
+import { InjectEntityManager } from '@nestjs/typeorm';
+import { DataSource, QueryRunner } from 'typeorm';
+import { PaginationInput } from '../messages/dtos/pagination.input';
+import { Message } from '../messages/entities/message.entity';
+import { User } from '../users/entities/user.entity';
+import { ChatsRepository } from './chats.repository';
 import { CreateChatInput } from './dtos/create-chat.input';
 import { UpdateChatInput } from './dtos/update-chat.input';
-import { ChatsRepository } from './chats.repository';
-import { PaginationInput } from '../messages/dtos/pagination.input';
 import { Chat } from './entities/chat.entity';
 
 @Injectable()
 export class ChatsService {
-  constructor(private readonly chatsRepository: ChatsRepository) {}
+  constructor(
+    private readonly chatsRepository: ChatsRepository,
+    @InjectEntityManager()
+    private readonly dataSource: DataSource,
+  ) {}
+
   public async create(
     createChatInput: CreateChatInput,
     workspaceId: string,
@@ -61,5 +70,49 @@ export class ChatsService {
 
   remove(id: string) {
     return `This action removes a #${id} chat`;
+  }
+
+  async createChatWithInitialMessage(
+    createChatInput: CreateChatInput,
+    workspaceId: string,
+    user: User,
+  ): Promise<Chat> {
+    const createdChat: Chat = null;
+    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
+
+    try {
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
+
+      const createdChat = await this.create(
+        createChatInput,
+        workspaceId,
+        user.id,
+      );
+      // Send the initial message
+      await this.sendInitialMessage(user, createdChat, queryRunner);
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+
+    return createdChat;
+  }
+
+  private async sendInitialMessage(
+    user: User,
+    chat: Chat,
+    queryRunner: QueryRunner,
+  ): Promise<Message> {
+    const initialMessageContent = 'Hello 👋';
+    const message = new Message();
+    message.user = user;
+    message.chat = chat;
+    message.content = initialMessageContent;
+    return await queryRunner.manager.save(Message, message);
   }
 }
