@@ -11,4 +11,8 @@ export const configValidationSchema = Joi.object({
   REFRESH_TOKEN_SECRET: Joi.string().required(),
   ACCESS_TOKEN_EXPIRATION_TIME: Joi.number().required(),
   REFRESH_TOKEN_EXPIRATION_TIME: Joi.number().required(),
+  REDIS_PORT: Joi.number().default(6379).required(),
+  REDIS_HOST: Joi.string().required(),
+  ELASTICSEARCH_NODE: Joi.string().required(),
+  ELASTICSEARCH_INDEX: Joi.string().required(),
 });

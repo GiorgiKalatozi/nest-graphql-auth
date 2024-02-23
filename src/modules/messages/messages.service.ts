@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
-import { CreateMessageInput } from './dtos/create-message.input';
-import { PaginationInput } from './dtos/pagination.input';
-import { UpdateMessageInput } from './dtos/update-message.input';
-import { Message } from './entities/message.entity';
-import { MessagesRepository } from './repositories/messages.repository';
 import {
   DataSource,
   EntityManager,
   FindManyOptions,
   QueryRunner,
 } from 'typeorm';
-import { User } from '../users/entities/user.entity';
 import { Chat } from '../chats/entities/chat.entity';
+import { User } from '../users/entities/user.entity';
+import { CreateMessageInput } from './dtos/create-message.input';
+import { PaginationInput } from './dtos/pagination.input';
+import { UpdateMessageInput } from './dtos/update-message.input';
+import { Message } from './entities/message.entity';
+import { MessagesRepository } from './repositories/messages.repository';
 
 @Injectable()
 export class MessagesService {

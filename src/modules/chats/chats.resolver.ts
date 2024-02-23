@@ -39,23 +39,28 @@ export class ChatsResolver {
     return this.chatsService.paginateChats(pagination);
   }
 
+  @Query(() => [Chat], { name: 'searchChats' })
+  public async searchChats(@Args('query') query: string): Promise<Chat[]> {
+    return this.chatsService.searchChats(query);
+  }
+
   @Query(() => [Chat], { name: 'chats' })
   public findAll() {
     return this.chatsService.findAll();
   }
 
   @Query(() => Chat, { name: 'chat' })
-  findOne(@Args('id') id: string) {
+  public findOne(@Args('id') id: string) {
     return this.chatsService.findOne(id);
   }
 
   @Mutation(() => Chat)
-  updateChat(@Args('updateChatInput') updateChatInput: UpdateChatInput) {
+  public updateChat(@Args('updateChatInput') updateChatInput: UpdateChatInput) {
     return this.chatsService.update(updateChatInput.id, updateChatInput);
   }
 
   @Mutation(() => Chat)
-  removeChat(@Args('id') id: string) {
+  public removeChat(@Args('id') id: string) {
     return this.chatsService.remove(id);
   }
 }

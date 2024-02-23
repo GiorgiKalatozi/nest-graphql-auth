@@ -1,3 +1,5 @@
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
+import { UseInterceptors } from '@nestjs/common';
 import {
   Args,
   Int,
@@ -29,7 +31,8 @@ export class MessagesResolver {
   ) {
     return this.messagesService.create(createMessageInput, chatId, userId);
   }
-
+  @CacheTTL(60 * 1000)
+  @UseInterceptors(CacheInterceptor)
   @Query(() => [Message], { name: 'messages' })
   public async findAll() {
     return this.messagesService.findAll();

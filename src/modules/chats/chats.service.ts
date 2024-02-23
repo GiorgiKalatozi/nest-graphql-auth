@@ -3,6 +3,7 @@ import { InjectEntityManager } from '@nestjs/typeorm';
 import { DataSource, QueryRunner } from 'typeorm';
 import { PaginationInput } from '../messages/dtos/pagination.input';
 import { Message } from '../messages/entities/message.entity';
+import { SearchService } from '../search/search.service';
 import { User } from '../users/entities/user.entity';
 import { ChatsRepository } from './chats.repository';
 import { CreateChatInput } from './dtos/create-chat.input';
@@ -15,6 +16,7 @@ export class ChatsService {
     private readonly chatsRepository: ChatsRepository,
     @InjectEntityManager()
     private readonly dataSource: DataSource,
+    private readonly searchService: SearchService,
   ) {}
 
   public async create(
@@ -31,8 +33,15 @@ export class ChatsService {
         id: workspaceId,
       },
     });
-
+    await this.searchService.indexDocument('chats', chat.id, chat);
     return this.chatsRepository.save(chat);
+  }
+  public async searchChats(query: any): Promise<Chat[]> {
+    // Perform Elasticsearch search
+    const searchResults = await this.searchService.search('chats', query);
+
+    // Map Elasticsearch search results to Chat entities
+    return searchResults.hits.hits.map((hit) => hit._source);
   }
 
   public async findAll() {
@@ -72,7 +81,7 @@ export class ChatsService {
     return `This action removes a #${id} chat`;
   }
 
-  async createChatWithInitialMessage(
+  public async createChatWithInitialMessage(
     createChatInput: CreateChatInput,
     workspaceId: string,
     user: User,
