@@ -1,10 +1,11 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CurrentUserId } from 'src/common/decorators';
+import { CurrentUser, CurrentUserId } from 'src/common/decorators';
+import { PaginationInput } from '../messages/dtos/pagination.input';
+import { User } from '../users/entities/user.entity';
 import { ChatsService } from './chats.service';
 import { CreateChatInput } from './dtos/create-chat.input';
 import { UpdateChatInput } from './dtos/update-chat.input';
 import { Chat } from './entities/chat.entity';
-import { PaginationInput } from '../messages/dtos/pagination.input';
 
 @Resolver(() => Chat)
 export class ChatsResolver {
@@ -17,6 +18,18 @@ export class ChatsResolver {
     @CurrentUserId() userId: string,
   ): Promise<Chat> {
     return this.chatsService.create(createChatInput, workspaceId, userId);
+  }
+  @Mutation(() => Chat)
+  public createChatWithInitialMessage(
+    @Args('createChatInput') createChatInput: CreateChatInput,
+    @Args('workspaceId') workspaceId: string,
+    @CurrentUser() user: User,
+  ): Promise<Chat> {
+    return this.chatsService.createChatWithInitialMessage(
+      createChatInput,
+      workspaceId,
+      user,
+    );
   }
 
   @Query(() => [Chat])
