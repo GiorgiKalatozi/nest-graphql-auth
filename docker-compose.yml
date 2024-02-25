@@ -13,13 +13,14 @@ services:
       - .:/usr/src/app
     ports:
       - ${PORT}:${PORT}
-      - 9229:9229
     env_file:
       - .env
     depends_on:
       - postgres
       - redis
       - elasticsearch
+    networks:
+      - app_network
 
   postgres:
     container_name: postgres
@@ -33,6 +34,8 @@ services:
       - ${DB_PORT}:${DB_PORT}
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - app_network
     healthcheck:
       test:
         ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB_NAME}']
@@ -40,10 +43,13 @@ services:
   redis:
     image: redis
     restart: always
+    container_name: redis
     ports:
-      - 6379:6379
+      - ${REDIS_PORT}:${REDIS_PORT}
     volumes:
-      - redis:/data
+      - redisdata:/data
+    networks:
+      - app_network
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
       interval: 10s
@@ -51,25 +57,33 @@ services:
       retries: 3
 
   elasticsearch:
-    container_name: elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.1
     restart: always
+    container_name: elasticsearch
     environment:
       - discovery.type=single-node
     ports:
-      - 9200:9200
+      - '${ELASTICSEARCH_PORT}:${ELASTICSEARCH_PORT}'
       - 9300:9300
+    volumes:
+      - 'esdata:/usr/share/elasticsearch/data'
+    networks:
+      - app_network
     healthcheck:
       test:
         [
           'CMD-SHELL',
-          'curl --silent --fail localhost:9200/_cluster/health || exit 1',
+          'curl --silent --fail elasticsearch:9200/_cluster/health || exit 1',
         ]
       interval: 30s
       timeout: 10s
       retries: 5
 
+networks:
+  app_network:
+    driver: bridge
+
 volumes:
   pgdata: {}
-  redis:
-    driver: local
+  redisdata: {}
+  esdata: {}

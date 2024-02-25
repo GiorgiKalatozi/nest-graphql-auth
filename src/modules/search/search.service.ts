@@ -119,9 +119,10 @@ export class SearchService {
   //     const hits = body.hits.hits;
   //     return hits.map((item) => item._source);
   //   }
-  public async remove(id: number) {
+  public async remove(id: number, index: string) {
     this.elasticsearchService.deleteByQuery({
-      index: this.configService.get('ELASTICSEARCH_INDEX')!,
+      index,
+      // index: this.configService.get('ELASTICSEARCH_INDEX')!,
       body: {
         query: {
           match: {

@@ -7,7 +7,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { redisStore } from 'cache-manager-redis-yet';
 import { join } from 'path';
-import { configValidationSchema, typeorm, redisConfig } from '../config';
+import { configValidationSchema, redisConfig, typeorm } from '../config';
 import { AuthModule } from './auth/auth.module';
 import { AccessTokenGuard } from './auth/guards/access-token.guard';
 import { ChatsModule } from './chats/chats.module';
@@ -15,6 +15,7 @@ import { MessagesModule } from './messages/messages.module';
 import { PubSubModule } from './pub-sub/pub-sub.module';
 import { UsersModule } from './users/users.module';
 import { WorkspacesModule } from './workspaces/workspaces.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { WorkspacesModule } from './workspaces/workspaces.module';
       },
       inject: [ConfigService],
     }),
+    SearchModule,
     AuthModule,
     UsersModule,
     WorkspacesModule,

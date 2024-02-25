@@ -26,6 +26,7 @@ type Message {
 type Mutation {
   assignAdminRole(id: String!): User!
   createChat(createChatInput: CreateChatInput!, workspaceId: String!): Chat!
+  createChatWithInitialMessage(createChatInput: CreateChatInput!, workspaceId: String!): Chat!
   createMessage(chatId: String!, createMessageInput: CreateMessageInput!): Message!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   refreshTokens: TokensResponse!
@@ -58,6 +59,7 @@ type Query {
   messages: [Message!]!
   paginateChats(pagination: PaginationInput!): [Chat!]!
   paginateMessages(pagination: PaginationInput!): [Message!]!
+  searchChats(query: String!): [Chat!]!
   user(id: String!): User!
   users: [User!]!
   workspace(id: Int!): Workspace!
