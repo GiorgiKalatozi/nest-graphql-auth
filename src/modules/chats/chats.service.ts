@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { InjectEntityManager } from '@nestjs/typeorm';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Inject, Injectable } from '@nestjs/common';
+import { Cache } from 'cache-manager';
 import { DataSource, QueryRunner } from 'typeorm';
 import { PaginationInput } from '../messages/dtos/pagination.input';
 import { Message } from '../messages/entities/message.entity';
@@ -14,7 +15,7 @@ import { Chat } from './entities/chat.entity';
 export class ChatsService {
   constructor(
     private readonly chatsRepository: ChatsRepository,
-    @InjectEntityManager()
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     private readonly dataSource: DataSource,
     private readonly searchService: SearchService,
   ) {}
@@ -45,7 +46,17 @@ export class ChatsService {
   }
 
   public async findAll() {
-    return this.chatsRepository.findAll();
+    const cachedChats = await this.cacheManager.get<Chat[]>('chats');
+
+    if (cachedChats) {
+      return cachedChats;
+    }
+
+    const chats = await this.chatsRepository.findAll();
+
+    await this.cacheManager.set('chats', chats, 50000);
+
+    return chats;
   }
 
   public async paginateChats(pagination: PaginationInput): Promise<Chat[]> {

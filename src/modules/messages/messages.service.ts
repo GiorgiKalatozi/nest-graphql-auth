@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
 import {
   DataSource,
@@ -13,11 +13,14 @@ import { PaginationInput } from './dtos/pagination.input';
 import { UpdateMessageInput } from './dtos/update-message.input';
 import { Message } from './entities/message.entity';
 import { MessagesRepository } from './repositories/messages.repository';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class MessagesService {
   constructor(
     private readonly messagesRepository: MessagesRepository,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     private readonly entityManager: EntityManager,
     private readonly dataSource: DataSource,
     private readonly pubSub: PubSub,
@@ -104,7 +107,19 @@ export class MessagesService {
   }
 
   public async findAll() {
-    return this.messagesRepository.findAll();
+    const cachedMessages = await this.cacheManager.get<Message[]>('messages');
+
+    if (cachedMessages) {
+      return cachedMessages;
+    }
+
+    const messages = await this.messagesRepository.findAll();
+
+    // Cache the messages
+    await this.cacheManager.set('messages', messages, 60000); // Cache for 60 seconds
+
+    return messages;
+    // return this.messagesRepository.findAll();
   }
 
   public async find(data: FindManyOptions<Message>) {
