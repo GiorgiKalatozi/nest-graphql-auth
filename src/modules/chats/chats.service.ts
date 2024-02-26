@@ -5,7 +5,6 @@ import { DataSource, QueryRunner } from 'typeorm';
 import { PaginationInput } from '../messages/dtos/pagination.input';
 import { Message } from '../messages/entities/message.entity';
 import { SearchService } from '../search/search.service';
-import { User } from '../users/entities/user.entity';
 import { ChatsRepository } from './chats.repository';
 import { CreateChatInput } from './dtos/create-chat.input';
 import { UpdateChatInput } from './dtos/update-chat.input';
@@ -95,22 +94,19 @@ export class ChatsService {
   public async createChatWithInitialMessage(
     createChatInput: CreateChatInput,
     workspaceId: string,
-    user: User,
+    userId: string,
   ): Promise<Chat> {
-    const createdChat: Chat = null;
-    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
+    let createdChat: Chat;
+
+    const queryRunner = this.chatsRepository.queryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     try {
-      await queryRunner.connect();
-      await queryRunner.startTransaction();
+      createdChat = await this.create(createChatInput, workspaceId, userId);
 
-      const createdChat = await this.create(
-        createChatInput,
-        workspaceId,
-        user.id,
-      );
-      // Send the initial message
-      await this.sendInitialMessage(user, createdChat, queryRunner);
+      await this.sendInitialMessage(userId, createdChat, queryRunner);
 
       await queryRunner.commitTransaction();
     } catch (error) {
@@ -124,15 +120,16 @@ export class ChatsService {
   }
 
   private async sendInitialMessage(
-    user: User,
+    userId: string,
     chat: Chat,
     queryRunner: QueryRunner,
   ): Promise<Message> {
     const initialMessageContent = 'Hello 👋';
     const message = new Message();
-    message.user = user;
+    message.user = { id: userId };
     message.chat = chat;
     message.content = initialMessageContent;
-    return await queryRunner.manager.save(Message, message);
+
+    return queryRunner.manager.save(message);
   }
 }

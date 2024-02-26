@@ -25,6 +25,10 @@ export class ChatsRepository {
     return this.chatsRepository.createQueryBuilder(name);
   }
 
+  public queryRunner() {
+    return this.chatsRepository.manager.connection.createQueryRunner();
+  }
+
   public async update(id: string, chat: Chat): Promise<Chat> {
     const chatToUpdate = await this.chatsRepository.findOne({ where: { id } });
     await this.chatsRepository.update(id, chat);
