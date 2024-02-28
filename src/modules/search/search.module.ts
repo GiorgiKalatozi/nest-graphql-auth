@@ -10,10 +10,6 @@ import { SearchService } from './search.service';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         node: configService.get('ELASTICSEARCH_NODE'),
-        maxRetries: 10,
-        requestTimeout: 60000,
-        pingTimeout: 60000,
-        sniffOnStart: true,
         auth: {
           username: configService.get('ELASTICSEARCH_USERNAME'),
           password: configService.get('ELASTICSEARCH_PASSWORD'),

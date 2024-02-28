@@ -9,19 +9,20 @@ import {
 import { PubSub } from 'graphql-subscriptions';
 import { CurrentUserId } from 'src/common/decorators';
 import { CreateMessageInput } from './dtos/create-message.input';
+import { MessageResponse } from './dtos/message.response';
 import { PaginationInput } from './dtos/pagination.input';
+import { RemoveMessageResponse } from './dtos/remove-message.response';
 import { UpdateMessageInput } from './dtos/update-message.input';
-import { Message } from './entities/message.entity';
 import { MessagesService } from './messages.service';
 
-@Resolver(() => Message)
+@Resolver(() => MessageResponse)
 export class MessagesResolver {
   constructor(
     private readonly messagesService: MessagesService,
     private readonly pubSub: PubSub,
   ) {}
 
-  @Mutation(() => Message)
+  @Mutation(() => MessageResponse)
   public async createMessage(
     @Args('createMessageInput') createMessageInput: CreateMessageInput,
     @Args('chatId') chatId: string,
@@ -30,25 +31,25 @@ export class MessagesResolver {
     return this.messagesService.create(createMessageInput, chatId, userId);
   }
 
-  @Query(() => [Message], { name: 'messages' })
+  @Query(() => [MessageResponse], { name: 'messages' })
   public async findAll() {
     return this.messagesService.findAll();
   }
 
-  @Query(() => [Message], { name: 'paginateMessages' })
+  @Query(() => [MessageResponse], { name: 'paginateMessages' })
   public async getMessages(
     @Args('pagination') pagination: PaginationInput,
-  ): Promise<Message[]> {
+  ): Promise<MessageResponse[]> {
     return this.messagesService.getMessages(pagination);
   }
 
-  @Query(() => Message, { name: 'message' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  @Query(() => MessageResponse, { name: 'message' })
+  public findOne(@Args('id', { type: () => Int }) id: number) {
     return this.messagesService.findOne(id);
   }
 
-  @Mutation(() => Message)
-  updateMessage(
+  @Mutation(() => MessageResponse)
+  public updateMessage(
     @Args('updateMessageInput') updateMessageInput: UpdateMessageInput,
   ) {
     return this.messagesService.update(
@@ -57,17 +58,17 @@ export class MessagesResolver {
     );
   }
 
-  @Mutation(() => Message)
-  removeMessage(@Args('id') id: string) {
+  @Mutation(() => RemoveMessageResponse)
+  public removeMessage(@Args('id') id: string): Promise<RemoveMessageResponse> {
     return this.messagesService.remove(id);
   }
 
-  @Subscription(() => Message)
+  @Subscription(() => MessageResponse)
   public messageAdded() {
     return this.pubSub.asyncIterator('messageAdded');
   }
 
-  @Subscription(() => Message)
+  @Subscription(() => MessageResponse)
   public messageRemoved() {
     return this.pubSub.asyncIterator('messageRemoved');
   }
