@@ -13,7 +13,7 @@ export class Chat extends CommonEntity {
   @Field()
   name: string;
 
-  @Column({ type: 'enum', enum: ChatType, default: ChatType.SINGLE })
+  @Column({ type: 'enum', enum: ChatType, default: ChatType.GROUP })
   @Field()
   type: ChatType;
 
