@@ -23,22 +23,27 @@ type Message {
   content: String!
 }
 
+type MessageResponse {
+  content: String!
+  id: String!
+}
+
 type Mutation {
   assignAdminRole(id: String!): User!
   createChat(createChatInput: CreateChatInput!, workspaceId: String!): Chat!
   createChatWithInitialMessage(createChatInput: CreateChatInput!, workspaceId: String!): Chat!
-  createMessage(chatId: String!, createMessageInput: CreateMessageInput!): Message!
+  createMessage(chatId: String!, createMessageInput: CreateMessageInput!): MessageResponse!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   refreshTokens: TokensResponse!
   removeChat(id: String!): Chat!
-  removeMessage(id: String!): Message!
+  removeMessage(id: String!): RemoveMessageResponse!
   removeWorkspace(id: Int!): Workspace!
   revokeAdminRole(id: String!): User!
   signIn(signInInput: SignInInput!): SignResponse!
   signOut(signOutInput: SignOutInput!): SignOutResponse!
   signUp(signUpInput: SignUpInput!): SignResponse!
   updateChat(updateChatInput: UpdateChatInput!): Chat!
-  updateMessage(updateMessageInput: UpdateMessageInput!): Message!
+  updateMessage(updateMessageInput: UpdateMessageInput!): MessageResponse!
   updatePassword(updatePasswordInput: UpdatePasswordInput!): UpdatePasswordResponse!
   updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): Workspace!
 }
@@ -55,15 +60,20 @@ input PaginationInput {
 type Query {
   chat(id: String!): Chat!
   chats: [Chat!]!
-  message(id: Int!): Message!
-  messages: [Message!]!
+  message(id: Int!): MessageResponse!
+  messages: [MessageResponse!]!
   paginateChats(pagination: PaginationInput!): [Chat!]!
-  paginateMessages(pagination: PaginationInput!): [Message!]!
+  paginateMessages(pagination: PaginationInput!): [MessageResponse!]!
   searchChats(query: String!): [Chat!]!
   user(id: String!): User!
   users: [User!]!
   workspace(id: Int!): Workspace!
   workspaces: [Workspace!]!
+}
+
+type RemoveMessageResponse {
+  message: String!
+  success: Boolean!
 }
 
 input SignInInput {
@@ -91,8 +101,8 @@ input SignUpInput {
 }
 
 type Subscription {
-  messageAdded: Message!
-  messageRemoved: Message!
+  messageAdded: MessageResponse!
+  messageRemoved: MessageResponse!
 }
 
 type TokensResponse {
